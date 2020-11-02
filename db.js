@@ -11,26 +11,24 @@ const User = new mongoose.Schema({
   lists:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'List' }]
 });
 
-// an item (or group of the same items) in a grocery list
-// * includes the quantity of this item (multiple of the same item does not 
-//   require additional Item documents; just increase the quantity!)
-// * items in a list can be crossed off
-const Item = new mongoose.Schema({
+// an location in a course
+// * includes the name, photo, and description of the place.
+const Location = new mongoose.Schema({
   name: {type: String, required: true},
-  quantity: {type: Number, min: 1, required: true},
-  checked: {type: Boolean, default: false, required: true}
+  photo: {type: String, min: 1, required: true},
+  description: {type: String, required: true}
 }, {
   _id: true
 });
 
-// a grocery list
+// a course list
 // * each list must have a related user
 // * a list can have 0 or more items
-const List = new mongoose.Schema({
+const Course = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
   name: {type: String, required: true},
-  createdAt: {type: Date, required: true},
-  items: [Item]
+  loc: [Location],
+  rating: {type: Number, default:0, required: true}
 });
 
 // TODO: add remainder of setup for slugs, connection, registering models, etc. below
