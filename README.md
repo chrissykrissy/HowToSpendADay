@@ -58,23 +58,34 @@ An Example Course with Embedded Locations, Photos, and a description:
 
 (___TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc._)
 
+/login - page to login
+
+![login](documentation/login.png)
+
 /browse - page to browse all shared courses
 
-![list create](documentation/list-create.png)
+![browse](documentation/browse.png)
 
 /browse/summer_date - page for showing specific date course
 
-![list](documentation/list.png)
+![summer_date](documentation/summer-date.png)
 
 /add - page for add a course
 
-![list](documentation/list-slug.png)
+![add](documentation/add.png)
+
+/mine - page for courses I added
+
+![mine](documentation/mine.png)
+
 
 ## Site map
 
 (___TODO__: draw out a site map that shows how pages are related to each other_)
 
 Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
+
+![site_map](documentation/site-map.png)
 
 ## User Stories or Use Cases
 
