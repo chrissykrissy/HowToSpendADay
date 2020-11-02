@@ -21,7 +21,7 @@ The application will store Users, Courses, Locations, Photos, Descriptions, and 
 * users can have multiple courses (via references)
 * each course will have one Rating (via references)
 * each courses can have multiple locations (by embedding)
-* each locations can have multiple photos and descriptions (by embedding)
+* each locations can have multiple photos and one description (by embedding)
 
 (___TODO__: sample documents_) √
 
@@ -35,7 +35,7 @@ An Example User:
 }
 ```
 
-An Example Course with Embedded Locations, Photos, and descriptions:
+An Example Course with Embedded Locations, Photos, and a description:
 
 ```javascript
 {
@@ -115,6 +115,6 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 (___TODO__: list any tutorials/references/etc. that you've based your code off of_) √
 
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [Google Map API](https://developers.google.com/maps/documentation/javascript/overview) - (add link to source code that was based on this)
+1. [passport.js authentication docs](http://passportjs.org/docs)
+2. [Google Map API](https://developers.google.com/maps/documentation/javascript/overview)
 3. [Bootstrap](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
