@@ -54,4 +54,4 @@ if (process.env.NODE_ENV === 'PRODUCTION') {
  dbconf = 'mongodb://localhost/finalproj';
 }
 
-mongoose.connect('dbconf');
+mongoose.connect(dbconf);
