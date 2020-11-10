@@ -1,1 +1,14 @@
-🏝How To Spend A Day!🏖
+<table>
+    <tr style="color : lightblue;">
+        <th>Name</th>
+        <th>Photo</th>
+        <th>Description</th>
+    </tr>
+    {{#each locArr}}
+    <tr>
+        <th>{{this.name}}</th>
+        <th><img src= {{this.imageLink}}></th>
+        <th>{{this.description}}</th>
+    </tr>
+    {{/each}}
+</table>

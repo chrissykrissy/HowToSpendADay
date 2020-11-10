@@ -15,7 +15,8 @@ const User = new mongoose.Schema({
 // * includes the name, photo, and description of the place.
 const Location = new mongoose.Schema({
   name: {type: String, required: true},
-  photo: {type: String, min: 1, required: true},
+  imageLink: {type:String},
+  // photo: {type: String, min: 1, required: true},
   description: {type: String, required: true}
 }, {
   _id: true
@@ -32,6 +33,8 @@ const Course = new mongoose.Schema({
 });
 
 mongoose.model('Course', Course);
+mongoose.model('Location', Location);
+mongoose.model('User', User);
 
 // TODO: add remainder of setup for slugs, connection, registering models, etc. below
 
