@@ -17,9 +17,7 @@ const Location = new mongoose.Schema({
   name: {type: String, required: true},
   imageLink: {type:String},
   // photo: {type: String, min: 1, required: true},
-  description: {type: String, required: true}
-}, {
-  _id: true
+  description: {type: String}
 });
 
 // a course list
@@ -29,7 +27,7 @@ const Course = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
   name: {type: String, required: true},
   loc: [Location],
-  rating: {type: Number, default:0, required: true}
+  rating: {type: String}
 });
 
 mongoose.model('Course', Course);

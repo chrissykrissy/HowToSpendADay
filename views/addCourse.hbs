@@ -1,0 +1,10 @@
+<h2>Add A Course</h2>
+<form method="POST" action="/addCourse">
+    Name: <input type="text" name="name">	
+    Location: <select id = "dropLoc" name = "loc">
+        {{#each locations}}
+        <option>{{this.name}}</option>
+        {{/each}}
+    </select>
+    <input type="submit" value="add">	
+</form>

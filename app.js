@@ -10,6 +10,8 @@ const Strategy = require('passport-google-oauth20').Strategy;
 
 const mongoose = require('mongoose');
 const Location = mongoose.model('Location');
+const Course = mongoose.model('Course');
+const User = mongoose.model('User');
 
 // enable sessions
 const session = require('express-session');
@@ -77,7 +79,7 @@ app.get('/add', (req,res)=>{
 
 app.post('/add', function(req,res){
   const newL = new Location(req.body);
-  console.log(newL);
+  // console.log(newL);
   newL.save((err,saved)=>{
     if (err){
         console.log("Error: NOT POSSIBLE TO ADD");
@@ -85,7 +87,44 @@ app.post('/add', function(req,res){
         console.log("Saved: ", saved);
         res.redirect('/');
     }
-})});
+  });
+});
+
+app.get('/browse', (req,res) =>{
+  Course.find((err, c) => {
+    res.render('browse',{courses : c});
+  });
+})
+
+app.get('/addCourse', (req, res) =>{
+  Location.find((err, locs) =>{
+    // console.log(locs);
+    res.render('addCourse', {locations : locs});
+  });
+});
+
+app.post('/addCourse', function(req,res){
+  console.log(req.body);
+  const name = req.body.name;
+  // const loc = req.body.loc;
+  const newC = new Course({"name": name, "loc": Location.find({"name" : req.body.loc}).exec()});
+  // console.log(req.body);
+  newC.save((err, saved) =>{
+    if (err){
+      console.log(err);
+    }else{
+      console.log("Saved: ", saved);
+      res.redirect('/browse');
+    }
+  });
+});
+
+app.get('/map', function(req, res){
+  res.render('map');
+})
 
 
-app.listen(process.env.PORT || 3000);
+
+
+
+app.listen(process.env.PORT || 5000);
