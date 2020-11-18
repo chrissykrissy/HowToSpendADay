@@ -91,7 +91,7 @@ app.post('/add', function(req,res){
 });
 
 app.get('/browse', (req,res) =>{
-  Course.findOne((err, c) => {
+  Course.find((err, c) => {
     console.log(c);
     res.render('browse',{courses : c});
   }).exec();
