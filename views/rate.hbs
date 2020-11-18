@@ -1,11 +1,16 @@
 <h2>Add A Rating</h2>
-<form method="POST" action="/add">
-    Course : 
+<form method="POST" action="/rate">
+    Course: <select id = "dropLoc" name = "name">
+        {{#each courses}}
+        <option>{{this.name}}</option>
+        {{/each}}
+    </select>
     Rate : <select id = "rate" name = "star">
-        <option value = '1'> 🌟 </option>
-        <option value = '2'> 🌟🌟 </option>
-        <option value = '3'> 🌟🌟🌟 </option>
-        <option value = '4'> 🌟🌟🌟🌟 </option> 
-        <option value = '5'> 🌟🌟🌟🌟🌟 </option> 
-        </select>      
+        <option value="🌟"> 🌟 </option>
+        <option value="🌟🌟"> 🌟🌟 </option>
+        <option value="🌟🌟🌟"> 🌟🌟🌟 </option>
+        <option value="🌟🌟🌟🌟"> 🌟🌟🌟🌟 </option> 
+        <option value="🌟🌟🌟🌟🌟"> 🌟🌟🌟🌟🌟 </option> 
+        </select>   
+    <input type="submit" value="rate">	
 </form>

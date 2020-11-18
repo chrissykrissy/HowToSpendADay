@@ -14,10 +14,11 @@ const User = new mongoose.Schema({
 // an location in a course
 // * includes the name, photo, and description of the place.
 const Location = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: {type: String},
   imageLink: {type:String},
   // photo: {type: String, min: 1, required: true},
-  description: {type: String}
+  description: {type: String},
+  rating: {type: String}
 });
 
 // a course list
@@ -25,9 +26,9 @@ const Location = new mongoose.Schema({
 // * a list can have 0 or more items
 const Course = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-  name: {type: String, required: true},
+  name: {type: String},
   loc: [Location],
-  rating: {type: String}
+  rating: {type: {type:String}}
 });
 
 mongoose.model('Course', Course);

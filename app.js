@@ -91,9 +91,10 @@ app.post('/add', function(req,res){
 });
 
 app.get('/browse', (req,res) =>{
-  Course.find((err, c) => {
+  Course.findOne((err, c) => {
+    console.log(c);
     res.render('browse',{courses : c});
-  });
+  }).exec();
 })
 
 app.get('/addCourse', (req, res) =>{
@@ -104,10 +105,15 @@ app.get('/addCourse', (req, res) =>{
 });
 
 app.post('/addCourse', function(req,res){
-  console.log(req.body);
-  const name = req.body.name;
+  // console.log(req.body);
+  // const name = req.body.name;
   // const loc = req.body.loc;
-  const newC = new Course({"name": name, "loc": Location.find({"name" : req.body.loc}).exec()});
+  const newC = new Course({
+    name : req.body.name,
+    loc : Location.findOne({name: req.body.loc}, function(err, loca, count){
+      console.log(err, loca, count);
+    })});
+  // const newC = new Course({"name": name, "loc": Location.find({"name" : req.body.loc}).exec()});
   // console.log(req.body);
   newC.save((err, saved) =>{
     if (err){
@@ -121,7 +127,32 @@ app.post('/addCourse', function(req,res){
 
 app.get('/map', function(req, res){
   res.render('map');
-})
+});
+
+app.get('/rate', function(req, res){
+  Course.find((err, cors) =>{
+    // console.log(locs);
+    res.render('rate', {courses : cors});
+  });
+});
+
+mongoose.set('useFindAndModify', false);
+
+
+app.post('/rate', (req, res) => {
+  // Course.findOne({name : req.body.name}, function(err, cs){
+  //   cs.rating.push({rating: req.body.star});
+  //   cs.save(function(err, saved) {
+  //     if(!err){
+  //       console.log(saved);
+  //     }
+  //   });
+  Course.findOneAndUpdate({name: req.body.name}, {$push : {rating: req.body.star}}, function(err, updated){
+    console.log(err, updated);
+    console.log(updated.rating);
+    res.redirect('/browse');
+  });
+});
 
 
 
