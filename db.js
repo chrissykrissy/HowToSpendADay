@@ -1,5 +1,6 @@
 // 1ST DRAFT DATA MODEL
 const mongoose = require('mongoose');
+const passportLocMong = require('passport-local-mongoose');
 
 // users
 // * our site requires authentication...
@@ -8,8 +9,12 @@ const mongoose = require('mongoose');
 const User = new mongoose.Schema({
   // username provided by authentication plugin
   // password hash provided by authentication plugin
-  lists:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'List' }]
+  name: String,
+  email : String,
+  password: String
 });
+
+User.plugin(passportLocMong);
 
 // an location in a course
 // * includes the name, photo, and description of the place.

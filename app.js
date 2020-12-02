@@ -1,14 +1,45 @@
 require('./db');
 
+if (process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const methodOW = require('method-override');
 
 const app = express();
-const passport = require('passport');
-const Strategy = require('passport-google-oauth20').Strategy;
+app.use(methodOW('_method'));
 
-const mongoose = require('mongoose');
+const passport = require('passport');
+const initpprt = require('./passport-config1');
+initpprt();
+// initpprt(passport, email => {
+//   User.findOne({email : email}, (err, usr) => {
+//     if (err){
+//       console.log(err);
+//       // return null;
+//     }else{
+//       console.log(usr);
+//       // return usr;
+//     }
+//   }).exec;},
+//   id => {
+//     User.find({id : id}, (err, usr) => {
+//       if (err){
+//         // return null;
+//       }else{
+//         // return usr;
+//       }
+//     });
+//   }
+// );
+
+const flash = require('express-flash');
+app.use(flash());
+const bcrypt = require('bcrypt');
+
 const Location = mongoose.model('Location');
 const Course = mongoose.model('Course');
 const User = mongoose.model('User');
@@ -16,11 +47,13 @@ const User = mongoose.model('User');
 // enable sessions
 const session = require('express-session');
 const sessionOptions = {
-    secret: 'secret cookie thang (store this elsewhere!)',
-    resave: true,
-      saveUninitialized: true
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
 };
 app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 const logger = (req, res, next) => {
@@ -39,23 +72,60 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-//help from https://github.com/passport/express-4.x-facebook-example 
 
-// passport.use(new Strategy({
-//   clientID: process.env['GOOGLE_CLIENT_ID'],
-//   clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-//   callbackURL: "/return"
-// },
-// function(accessToken, refreshToken, profile, cb) {
-//   User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//     return cb(err, user);
-//   });
-// }
-// ));
+app.get('/login',checkNotAuth, function(req, res){
+  res.render('login', {message : req.flash('message')});
+});
 
-// app.get('/login', function(req, res){
-//   res.render('login');
-// });
+app.post('/login', checkNotAuth, passport.authenticate('local', {
+  successRedirect : '/',
+  failureRedirect : '/login',
+  failureFlash: true
+  }));
+
+app.get('/register',checkNotAuth, function(req, res){
+  res.render('register');
+});
+
+app.post('/register',checkNotAuth, async (req, res) => {
+  try {
+    const hashedpwd = await bcrypt.hash(req.body.password, 10);
+    const newUser = new User({
+      name : req.body.name,
+      email : req.body.email,
+      password : hashedpwd
+    });
+    newUser.save((err, saved) => {
+      if (err){
+        console.log(err);
+      }else{
+        console.log("Saved: ", saved);
+        res.redirect('/login');
+      }
+    });
+  }catch{
+    res.redirect('/register');
+  }
+});
+
+function checkAuth(req, res, next){
+  if (req.isAuthenticated()){
+    return next();
+  }
+  res.redirect('/login')
+}
+
+function checkNotAuth(req, res, next){
+  if (req.isAuthenticated()){
+    return res.redirect('/');
+  }
+  next();
+}
+
+app.delete('/logout', (req, res) => {
+  req.logOut();
+  res.redirect('/login');
+});
 
 // app.get('/login/google',
 //   passport.authenticate('google', { scope: ['profile'] }));
@@ -67,7 +137,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     res.redirect('/');
 //   });
 
-app.get('/', (req, res) => {
+app.get('/', checkAuth, (req, res) => {
   Location.find(req.query, function(err,locs){
     res.render('index', {locArr: locs});
   });
