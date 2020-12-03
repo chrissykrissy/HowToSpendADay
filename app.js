@@ -12,6 +12,8 @@ const methodOW = require('method-override');
 const app = express();
 app.use(methodOW('_method'));
 
+const users = [];
+
 const passport = require('passport');
 const initpprt = require('./passport-config1');
 initpprt();
@@ -83,6 +85,8 @@ app.post('/login', checkNotAuth, passport.authenticate("local",{
     failureFlash : true
   }));
 
+  const userWL = users.filter((u) => u.length > 6);
+
 // app.post('/login', (req, res) => {
 //   passport.authenticate('local', (err, user, info) => {
 //     if (err){
@@ -116,12 +120,13 @@ app.post('/login', checkNotAuth, passport.authenticate("local",{
   // failureRedirect : '/login',
   // failureFlash: true
 
-app.get('/register',checkAuth, function(req, res){
+app.get('/register', function(req, res){
   res.render('register');
 });
 
-app.post('/register', checkAuth, (req, res) => {
+app.post('/register', (req, res) => {
   // const hashedpwd = await bcrypt.hash(req.body.password, 10);
+  users.push(req.body.name);
   User.register(new User({
     username : req.body.name,
     email : req.body.email,
@@ -181,6 +186,8 @@ app.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
+const userWS = users.filter((u) => u.length < 6);
+
 // app.get('/login/google',
 //   passport.authenticate('google', { scope: ['profile'] }));
 
@@ -236,7 +243,7 @@ app.post('/addCourse', checkAuth,function(req,res){
     name : req.body.name,
     loc : Location.findOne({name: req.body.loc}, function(err, loca, count){
       console.log(err, loca, count);
-    })});
+    }).exec()});
   // const newC = new Course({"name": name, "loc": Location.find({"name" : req.body.loc}).exec()});
   // console.log(req.body);
   newC.save((err, saved) =>{
@@ -249,11 +256,13 @@ app.post('/addCourse', checkAuth,function(req,res){
   });
 });
 
+const userW = users.filter((u) => u.contains("A"));
+
 app.get('/map', checkAuth, function(req, res){
   res.render('map');
 });
 
-app.get('/rate', function(req, res){
+app.get('/rate', checkAuth, function(req, res){
   Course.find((err, cors) =>{
     // console.log(locs);
     res.render('rate', {courses : cors});
