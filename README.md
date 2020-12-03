@@ -65,7 +65,11 @@ An Example Course with Embedded Locations, Photos, and a description:
 
 ![register](documentation/register.jpg)
 
-/browse - page to browse all locations
+/ (Home) - page to browse all locations
+
+![/](documentation/home.jpg)
+
+/browse - page to browse all courses and ratings
 
 ![browse](documentation/browse.jpg)
 
