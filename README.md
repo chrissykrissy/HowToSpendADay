@@ -30,8 +30,7 @@ An Example User:
 ```javascript
 {
   username: "Chrissy",
-  hash: // a password hash,
-  lists: // an array of references to Courses documents
+  email: // an email,
 }
 ```
 
@@ -45,7 +44,7 @@ An Example Course with Embedded Locations, Photos, and a description:
     { name: "Restaurant", Photo: {link/uploaded path to photos}, Description: "Nice food!"},
     { name: "Amusement Park", Photo: {link/uploaded path to photos}, Description: "Fun Rides"},
   ],
-  Rating : Number
+  Rating : String
 }
 ```
 
@@ -60,24 +59,31 @@ An Example Course with Embedded Locations, Photos, and a description:
 
 /login - page to login
 
-![login](documentation/login.png)
+![login](documentation/login.jpg)
 
-/browse - page to browse all shared courses
+/register - page to register
 
-![browse](documentation/browse.png)
+![register](documentation/register.jpg)
 
-/browse/summer_date - page for showing specific date course
+/browse - page to browse all locations
 
-![summer_date](documentation/summer-date.png)
+![browse](documentation/browse.jpg)
+
+/add - page for add a location
+
+![add](documentation/add.jpg)
 
 /add - page for add a course
 
-![add](documentation/add.png)
+![add](documentation/addCourse.jpg)
 
-/mine - page for courses I added
+/rate - page for rating courses
 
-![mine](documentation/mine.png)
+![rate](documentation/rate.jpg)
 
+/map - page for searching locations
+
+![map](documentation/map.jpg)
 
 ## Site map
 
@@ -94,9 +100,9 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
 3. as a user, I can create a new course
-4. as a user, I can view all the shared courses
-5. as a user, I can add courses
-6. as a user, I can choose to view only my courses
+4. as a user, I can view all the shared locations
+5. as a user, I can seach locations
+6. as a user, I can rate courses
 
 ## Research Topics
 
