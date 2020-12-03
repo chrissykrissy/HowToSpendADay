@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const bcrypt = require('bcrypt');
 
-passport.use(new locStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUse());
+passport.use(new locStrategy({usernameField: 'email'}, User.authenticate()));
+passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // passport.use(new locStrategy(function(email, password, done){

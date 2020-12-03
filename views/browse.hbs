@@ -1,15 +1,11 @@
 <table>
     <tr style="color : lightblue;">
         <th>Course Name</th>
-        <th>Locations</th>
         <th>Rating</th>
     </tr>
     {{#each courses}}
     <tr>
         <th>{{this.name}}</th>
-        {{!-- {{#each this.loc}} --}}
-        <th>{{this.loc}}</th>
-        {{!-- {{/each}} --}}
         <th>{{this.rating}}</th>
     </tr>
     {{/each}}

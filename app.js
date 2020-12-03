@@ -73,39 +73,93 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get('/login',checkNotAuth, function(req, res){
+app.get('/login', checkNotAuth, function(req, res){
   res.render('login', {message : req.flash('message')});
 });
 
-app.post('/login', checkNotAuth, passport.authenticate('local', {
-  successRedirect : '/',
-  failureRedirect : '/login',
-  failureFlash: true
+app.post('/login', checkNotAuth, passport.authenticate("local",{
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash : true
   }));
 
-app.get('/register',checkNotAuth, function(req, res){
+// app.post('/login', (req, res) => {
+//   passport.authenticate('local', (err, user, info) => {
+//     if (err){
+//       res.json({success: false, message: err}); 
+//     }else{ 
+//       if (!user) { 
+//         res.json({success: false, message: 'username or password incorrect'}) 
+//       }else{ 
+//         req.login(user, function(err){ 
+//           if(err){ 
+//             res.json({success: false, message: err}) 
+//           }else{ 
+//             const token =  jwt.sign({userId : user._id,username:user.name}, secretkey,{expiresIn: '24h'}); 
+//             res.json({success:true, message:"Authentication successful", token: token }); 
+//           } 
+//         });
+//       }
+//     }
+//   })(req, res);
+// });
+  // User.findOne({
+  //   email : req.body.email
+  // }, (err, user) => {
+  //   res.statusCode = 200;
+  //   res.json({
+  //     sucess : true,
+  //     status: 'Sucess!'
+  //   });
+  // });
+  // successRedirect : '/',
+  // failureRedirect : '/login',
+  // failureFlash: true
+
+app.get('/register',checkAuth, function(req, res){
   res.render('register');
 });
 
-app.post('/register',checkNotAuth, async (req, res) => {
-  try {
-    const hashedpwd = await bcrypt.hash(req.body.password, 10);
-    const newUser = new User({
-      name : req.body.name,
-      email : req.body.email,
-      password : hashedpwd
-    });
-    newUser.save((err, saved) => {
-      if (err){
-        console.log(err);
-      }else{
-        console.log("Saved: ", saved);
-        res.redirect('/login');
-      }
-    });
-  }catch{
-    res.redirect('/register');
-  }
+app.post('/register', checkAuth, (req, res) => {
+  // const hashedpwd = await bcrypt.hash(req.body.password, 10);
+  User.register(new User({
+    username : req.body.name,
+    email : req.body.email,
+    // password : req.body.password
+  }), req.body.password,(err, user) => {
+    if (err){
+      res.statusCode = 500;
+      res.json({err: err});
+    }else{
+      res.json({success: true, message: "Your account has been saved"}) 
+      // passport.authenticate('local')(req,res,() =>{
+      //   User.findOne({
+      //     email : req.body.email
+      //   }, (err, user) => {
+      //     res.statusCode = 200;
+      //     res.json({sucess: true, status: 'Registration Sucess!'});
+      //   });
+      // });
+    }
+  });
+  // try {
+  //   const hashedpwd = await bcrypt.hash(req.body.password, 10);
+  //   const newUser = new User({
+  //     name : req.body.name,
+  //     email : req.body.email,
+  //     password : hashedpwd
+  //   });
+  //   newUser.save((err, saved) => {
+  //     if (err){
+  //       console.log(err);
+  //     }else{
+  //       console.log("Saved: ", saved);
+  //       res.redirect('/login');
+  //     }
+  //   });
+  // }catch{
+  //   res.redirect('/register');
+  // }
 });
 
 function checkAuth(req, res, next){
@@ -122,8 +176,8 @@ function checkNotAuth(req, res, next){
   next();
 }
 
-app.delete('/logout', (req, res) => {
-  req.logOut();
+app.get('/logout', (req, res) => {
+  req.logout();
   res.redirect('/login');
 });
 
@@ -137,17 +191,17 @@ app.delete('/logout', (req, res) => {
 //     res.redirect('/');
 //   });
 
-app.get('/', checkAuth, (req, res) => {
+app.get('/', (req, res) => {
   Location.find(req.query, function(err,locs){
     res.render('index', {locArr: locs});
   });
 });
 
-app.get('/add', (req,res)=>{
+app.get('/add',checkAuth, (req,res)=>{
   res.render('add');
 });
 
-app.post('/add', function(req,res){
+app.post('/add', checkAuth, function(req,res){
   const newL = new Location(req.body);
   // console.log(newL);
   newL.save((err,saved)=>{
@@ -167,14 +221,14 @@ app.get('/browse', (req,res) =>{
   }).exec();
 })
 
-app.get('/addCourse', (req, res) =>{
+app.get('/addCourse', checkAuth,(req, res) =>{
   Location.find((err, locs) =>{
     // console.log(locs);
     res.render('addCourse', {locations : locs});
   });
 });
 
-app.post('/addCourse', function(req,res){
+app.post('/addCourse', checkAuth,function(req,res){
   // console.log(req.body);
   // const name = req.body.name;
   // const loc = req.body.loc;
@@ -195,7 +249,7 @@ app.post('/addCourse', function(req,res){
   });
 });
 
-app.get('/map', function(req, res){
+app.get('/map', checkAuth, function(req, res){
   res.render('map');
 });
 

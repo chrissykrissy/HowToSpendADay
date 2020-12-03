@@ -9,12 +9,12 @@ const passportLocMong = require('passport-local-mongoose');
 const User = new mongoose.Schema({
   // username provided by authentication plugin
   // password hash provided by authentication plugin
-  name: String,
+  username: String,
   email : String,
-  password: String
+  // password: String
 });
 
-User.plugin(passportLocMong);
+User.plugin(passportLocMong, {usernameField : 'email'});
 
 // an location in a course
 // * includes the name, photo, and description of the place.
